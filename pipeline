@@ -1,36 +1,51 @@
-
 pipeline {
-    agent any 
-    
-    stages{
-        stage("Clone Code"){
+    agent any
+
+    environment {
+        IMAGE_NAME = 'vamshi2506/vamshi2506_devops'
+    }
+
+    stages {
+        stage('SCM Checkout') {
             steps {
-                echo "Cloning the code"
-                git url:"https://github.com/LondheShubham153/django-notes-app.git", branch: "main"
+                git url: "https://github.com/vamshik2506/docker.git", branch: "main"
             }
         }
-        stage("Build"){
+
+        stage('Build Docker Image') {
             steps {
-                echo "Building the image"
-                sh "docker build -t my-note-app ."
+                sh 'docker build -t $IMAGE_NAME:$BUILD_NUMBER .'
             }
         }
-        stage("Push to Docker Hub"){
+
+        stage('Login to DockerHub & Push Image') {
             steps {
-                echo "Pushing the image to docker hub"
-                withCredentials([usernamePassword(credentialsId:"dockerHub",passwordVariable:"dockerHubPass",usernameVariable:"dockerHubUser")]){
-                sh "docker tag my-note-app ${env.dockerHubUser}/my-note-app:latest"
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker push ${env.dockerHubUser}/my-note-app:latest"
+                withCredentials([usernamePassword(credentialsId: 'dockerHub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push $IMAGE_NAME:$BUILD_NUMBER
+                    '''
                 }
             }
         }
-        stage("Deploy"){
+
+        stage('Run Docker Container') {
             steps {
-                echo "Deploying the container"
-                sh "docker run -d -p 8000:8000 vamshik2506/my-note-app:latest"
-                
+                script {
+                    sh '''
+                    echo "Stopping and removing existing container if it exists..."
+                    docker stop my-app-container || true
+                    docker rm my-app-container || true
+
+                    echo "Running new Docker container..."
+                    docker run -d --name my-app-container -p 9090:80 $IMAGE_NAME:$BUILD_NUMBER
+                    
+                    echo "Container started successfully."
+                    docker ps -a
+                    '''
+                }
             }
         }
     }
 }
+#change you repository,change the image tages,change the credentials id respectively.
