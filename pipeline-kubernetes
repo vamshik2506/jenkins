@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'vamshi2506/vamshi2506_devops'
+    }
+
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                git url: "https://github.com/vamshik2506/docker.git", branch: "main"
+            }
+        }
+
+        stage('Build & Push Docker Image') {
+            steps {
+                script {
+                    def buildNumber = env.BUILD_NUMBER ?: 'latest'
+                    sh "docker build -t ${IMAGE_NAME}:${buildNumber} ."
+                    withCredentials([usernamePassword(credentialsId: 'dockerHub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push ${IMAGE_NAME}:${buildNumber}
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.2.254:6443') {
+                    sh "kubectl set image deployment/docker-deployment docker=${IMAGE_NAME}:${BUILD_NUMBER} -n webapps"
+                }
+            }
+        }
+
+        stage('Monitor Deployment') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-cred', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://172.31.2.254:6443') {
+                    sh "kubectl get pods -n webapps"
+                    sh "kubectl get svc -n webapps"
+                }
+            }
+        }
+    }
+}
