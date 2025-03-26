@@ -35,6 +35,3 @@ sudo systemctl start jenkins
 
 # **Check the status of Jenkins service**
 sudo systemctl status jenkins
-```
-
-Would you like me to add more details or format it differently? 🚀
