@@ -1,215 +1,79 @@
-<!DOCTYPE html>
-<!-- saved from url=(0039)https://lyfofvipin.github.io/shared_lib -->
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Getting Started With Shared Library In Jenkins | Kumar Vipin Yadav</title>
-<meta name="generator" content="Jekyll v3.10.0">
-<meta property="og:title" content="Getting Started With Shared Library In Jenkins">
-<meta property="og:locale" content="en_US">
-<meta name="description" content="Why Shared Library Shared library help us to archive the DRY ( Do Not Repeat ) concept. Means that there might be scenarios where you need to repeat some steps you can use Shared Library to write your code there that can be used in more then one job.">
-<meta property="og:description" content="Why Shared Library Shared library help us to archive the DRY ( Do Not Repeat ) concept. Means that there might be scenarios where you need to repeat some steps you can use Shared Library to write your code there that can be used in more then one job.">
-<link rel="canonical" href="https://lyfofvipin.github.io/shared_lib">
-<meta property="og:url" content="/shared_lib">
-<meta property="og:site_name" content="Kumar Vipin Yadav">
-<meta property="og:type" content="article">
-<meta property="article:published_time" content="2024-04-30T00:00:00+00:00">
-<meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="Getting Started With Shared Library In Jenkins">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-04-30T00:00:00+00:00","datePublished":"2024-04-30T00:00:00+00:00","description":"Why Shared Library Shared library help us to archive the DRY ( Do Not Repeat ) concept. Means that there might be scenarios where you need to repeat some steps you can use Shared Library to write your code there that can be used in more then one job.","headline":"Getting Started With Shared Library In Jenkins","mainEntityOfPage":{"@type":"WebPage","@id":"/shared_lib"},"url":"/shared_lib"}</script>
-<!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="./jenkins shared libraries_files/style.css"><link type="application/atom+xml" rel="alternate" href="https://lyfofvipin.github.io/feed.xml" title="Kumar Vipin Yadav">
-<style type="text/css" id="operaUserStyle"></style></head>
-<body><header class="site-header">
+# Jenkins Shared Libraries
 
-  <div class="wrapper"><a class="site-title" rel="author" href="https://lyfofvipin.github.io/">Kumar Vipin Yadav</a><nav class="site-nav">
-        <input type="checkbox" id="nav-trigger" class="nav-trigger">
-        <label for="nav-trigger">
-          <span class="menu-icon">
-            <svg viewBox="0 0 18 15" width="18px" height="15px">
-              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
-            </svg>
-          </span>
-        </label>
+## What are Jenkins Shared Libraries?
+Jenkins Shared Libraries allow you to create reusable functions and workflows that can be used across multiple Jenkins pipelines. They help in maintaining DRY (Don't Repeat Yourself) principles, improving maintainability, and streamlining pipeline development.
 
-        <div class="trigger"><a class="page-link" href="https://lyfofvipin.github.io/about/">About</a><a class="page-link" href="https://lyfofvipin.github.io/c/">C</a><a class="page-link" href="https://lyfofvipin.github.io/go/">GO</a><a class="page-link" href="https://lyfofvipin.github.io/jenkins/">Jenkins</a><a class="page-link" href="https://lyfofvipin.github.io/meetups/">Meetups</a></div>
-      </nav></div>
-</header>
-<main class="page-content" aria-label="Content">
-      <div class="wrapper">
-        <article class="post h-entry" itemscope="" itemtype="http://schema.org/BlogPosting">
-  <link rel="shortcut icon" href="https://lyfofvipin.github.io/shared_lib#">
-  <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Getting Started With Shared Library In Jenkins</h1>
-    <p class="post-meta"><time class="dt-published" datetime="2024-04-30T00:00:00+00:00" itemprop="datePublished">
-        Apr 30, 2024
-      </time></p>
-  </header>
+## Setting Up a Shared Library
 
-  <div class="post-content e-content" itemprop="articleBody">
-    <h2 id="why-shared-library">Why Shared Library</h2>
-<p>Shared library help us to archive the DRY ( Do Not Repeat ) concept. Means that there might be scenarios where you need to repeat some steps you can use Shared Library to write your code there that can be used in more then one job.</p>
+### 1. Create a Git Repository for the Library
+Jenkins Shared Libraries are usually stored in a version control system like GitHub.
 
-<h2 id="how-to-setup-for-shared-library">How To Setup For Shared Library</h2>
+- Create a new Git repository (e.g., `jenkins-shared-lib`).
+- Inside the repository, create a directory structure:
+  ```
+  jenkins-shared-lib/
+  ├── vars/
+  │   ├── example.groovy
+  │   ├── notifySlack.groovy
+  ├── src/
+  ├── resources/
+  ├── README.md
+  ```
 
-<p>To Setup a shared library in Jenkins you need 2 configuration one is the repository structure and second is the adding the repository in the Jenkins configuration and you need to have some knowledge of groovy.</p>
+### 2. Writing a Shared Library Function
+Shared library functions are stored inside the `vars/` directory as Groovy scripts.
 
-<h3 id="setting-the-repo">Setting The Repo</h3>
-
-<p>First we have to setup our source code management repository and we have to create a directory name <code class="language-plaintext highlighter-rouge">vars</code> any groovy script written in this directory will act as module and any written function will act as submodule. To use the same in a Jenkinsfile we have to import the library and we will be using them like <code class="language-plaintext highlighter-rouge">module.submodule</code>.</p>
-
-<p>For demo purpose here is a sample for the same in <a href="https://github.com/lyfofvipin/jenkins_tutorials">repository</a>.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.
-.......
-└── vars
-    ├── lib_module_1.groovy
-    └── lib_module_2.groovy
-</code></pre></div></div>
-
-<p>Here I have created a directory name <code class="language-plaintext highlighter-rouge">vars</code> as it’s required then based on your requirement we can have as much as modules we want I have added 2 modules in it <code class="language-plaintext highlighter-rouge">lib_module_1</code> and <code class="language-plaintext highlighter-rouge">lib_module_2</code>.</p>
-
-<p>In <code class="language-plaintext highlighter-rouge">lib_module_1</code> I have written a function named as <code class="language-plaintext highlighter-rouge">func_from_module_1</code>.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def func_from_module_1(){
-    println("This is a test function from module 1 and function func_from_module_1")
-    println("This function can be used in any pipeline stages")
+#### Example: Deploy Web App Using Ansible
+Create `vars/deployWebApp.groovy`:
+```groovy
+// vars/deployWebApp.groovy
+void call(String server, String playbook) {
+    stage('Deploy Web App') {
+        sh "ansible-playbook -i ${server}, ${playbook}"
+    }
 }
-</code></pre></div></div>
+```
 
-<p>In <code class="language-plaintext highlighter-rouge">lib_module_2</code> I have written a function named as <code class="language-plaintext highlighter-rouge">func_from_module_2</code>.</p>
-
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def func_from_module_2(){
-    println("This is a test function from module 1 and function func_from_module_2")
-    println("This function can be used in any pipeline stages")
+#### Example: Send Slack Notification
+Create `vars/notifySlack.groovy`:
+```groovy
+// vars/notifySlack.groovy
+void call(String message, String channel = '#general') {
+    stage('Send Slack Notification') {
+        sh "curl -X POST --data-urlencode 'payload={\"text\": \"${message}\", \"channel\": \"${channel}\"}' https://hooks.slack.com/services/YOUR_SLACK_WEBHOOK"
+    }
 }
-</code></pre></div></div>
+```
 
-<p>These functions are just printing some text on the console.</p>
+## Configuring Jenkins to Use the Shared Library
+1. Go to **Manage Jenkins > Configure System**.
+2. Find **Global Pipeline Libraries**.
+3. Add a new library:
+   - Name: `jenkins-shared-lib`
+   - Default version: `main` (or specify a branch)
+   - Retrieval Method: Git
+   - Enter your Git repository URL.
 
-<p>Now these names <code class="language-plaintext highlighter-rouge">lib_module_2</code> or <code class="language-plaintext highlighter-rouge">func_from_module_2</code> can be anything you want.</p>
+## Using the Shared Library in a Pipeline
 
-<h3 id="adding-the-configuration-in-the-jenkins">Adding The Configuration In The Jenkins</h3>
+```groovy
+@Library('jenkins-shared-lib') _
 
-<p>To add the above repository as a library we have to add the same in Jenkins and to do the same here are the options.</p>
-
-<p><code class="language-plaintext highlighter-rouge">Manage Jenkins -&gt; Configure System -&gt; Global Pipeline Libraries -&gt; Add</code></p>
-
-<p>As you hit add button you will see a few options here are a few of them.</p>
-
-<p><code class="language-plaintext highlighter-rouge">Name</code> : The name of the new Shared Library.</p>
-
-<p><code class="language-plaintext highlighter-rouge">Default version</code>: Set a default brach of the repository to be used as library.</p>
-
-<p><code class="language-plaintext highlighter-rouge">Allow default version to be overridden</code>: This option allows scripts to select a custom version of the library.</p>
-
-<h2 id="how-to-use-the-same-in-jenkinsfilejenkins-pipeline">How To Use The Same In Jenkinsfile/Jenkins Pipeline</h2>
-
-<p>Before we start the same make sure you know how to write Jenkinsfile for more on the same you can checkout this video.</p>
-
-<p><a href="https://www.youtube.com/embed/mBsm8ipQgRE"><img src="./jenkins shared libraries_files/hqdefault.jpg" alt="Jenkins Pipeline"></a></p>
-
-<p>To use the same in Jenkinsfile we needs to use the <code class="language-plaintext highlighter-rouge">@Library</code> annotation before stating the <code class="language-plaintext highlighter-rouge">pipeline</code> block and we have to pass the library name to the same.
-Or we can use the same as a Jenkinsfile step like <code class="language-plaintext highlighter-rouge">library 'test_library'</code>.</p>
-
-<p>Using the configured version of the library.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Library('test_library') _
-</code></pre></div></div>
-<p>or if using in step</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library 'test_library'
-</code></pre></div></div>
-
-<p>Using any other version of the library let’s say <code class="language-plaintext highlighter-rouge">branch_01</code>.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Library('test_library@branch_01') _
-</code></pre></div></div>
-<p>or if using in step</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library 'test_library@master'
-</code></pre></div></div>
-
-<p>Using multiple library in a single pipeline.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Library(['test_library', 'test_library@other_version']) _
-</code></pre></div></div>
-<p>or if using in step</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>library 'test_library, test_library@other_version'
-</code></pre></div></div>
-
-<p>Example 1:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@Library('test_library@branch_01') _
-pipeline{
-    agent 'any'
-    stages{
-        stage("Stage_Name"){
-            steps{
-                sh "echo Test Stage.; pwd; hostname"
-                script{
-                    lib_module_1.func_from_module_1()
-                }
+pipeline {
+    agent any
+    stages {
+        stage('Deploy') {
+            steps {
+                deployWebApp('myserver.com', 'playbook.yml')
+            }
+        }
+        stage('Notify') {
+            steps {
+                notifySlack('Deployment Successful!')
             }
         }
     }
-    post{
-        success{
-            cleanWs()
-        }
-    }
 }
-</code></pre></div></div>
-
-<p>Example 2:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pipeline{
-    agent 'any'
-    stages{
-        stage("Stage_Name"){
-            steps{
-                library 'test_library'
-                sh "echo Test Stage.; pwd; hostname"
-                script{
-                    lib_module_1.func_from_module_1()
-                }
-            }
-        }
-    }
-    post{
-        success{
-            cleanWs()
-        }
-    }
-}
-</code></pre></div></div>
-
-  </div><a class="u-url" href="https://lyfofvipin.github.io/shared_lib" hidden=""></a>
-</article>
-
-      </div>
-    </main><footer class="site-footer h-card">
-  <data class="u-url" href="/"></data>
-
-  <div class="wrapper">
-
-    <div class="footer-col-wrapper">
-      <div class="footer-col">
-        <p class="feed-subscribe">
-          <a href="https://lyfofvipin.github.io/feed.xml">
-            <svg class="svg-icon orange">
-              <use xlink:href="/assets/minima-social-icons.svg#rss"></use>
-            </svg><span>Subscribe</span>
-          </a>
-        </p>
-      </div>
-      <div class="footer-col">
-        <p>Let's Do it!</p>
-      </div>
-    </div>
-
-    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://www.facebook.com/lyfofvipin" title="lyfofvipin"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#facebook"></use></svg></a></li><li><a rel="me" href="https://github.com/lyfofvipin" title="lyfofvipin"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/lyfofvipin" title="lyfofvipin"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#linkedin"></use></svg></a></li><li><a rel="me" href="https://twitter.com/lyfofvipin" title="lyfofvipin"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg></a></li><li><a rel="me" href="https://www.youtube.com/channel/UCogjiQoMtBFOI-jT9y_hQSQ" title="YouTube"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#youtube"></use></svg></a></li><li><a rel="me" href="https://t.me/lyfofvipin" title="lyfofvipin"><svg class="svg-icon grey"><use xlink:href="/assets/minima-social-icons.svg#telegram"></use></svg></a></li></ul>
-</div>
-
-  </div>
-
-</footer>
+```
 
 
-
-</body></html>
